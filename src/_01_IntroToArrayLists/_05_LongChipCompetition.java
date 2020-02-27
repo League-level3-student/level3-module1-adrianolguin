@@ -19,10 +19,41 @@ public class _05_LongChipCompetition {
 		_05_LongChipCompetition lcc = new _05_LongChipCompetition();
 		lcc.initializeBeatles();
 
-		ArrayList<Beatle> theBeatlesAccess = lcc.getTheBand();
-		for (int i = 0; i < theBeatlesAccess.size(); i++) {
+		ArrayList<Beatle> theBeatlesAvailable = lcc.getTheBand();
 
+		// go through the band members
+		double longestChip = 0;
+		Beatle temp = null;
+
+		for (int i = 0; i < theBeatlesAvailable.size(); i++) {
+			System.out.println(theBeatlesAvailable.get(i).getName());
+			for (int j = 0; j < theBeatlesAvailable.get(i).getChips().size(); j++) {
+				System.out.println(theBeatlesAvailable.get(i).getChips().get(j).getLength());
+			}
 		}
+
+		for (int i = 0; i < theBeatlesAvailable.size(); i++) {
+
+			// check if any of the band members chips are longer than the longest chip
+			for (int j = 0; j < theBeatlesAvailable.get(i).getChips().size(); j++) {
+				if (theBeatlesAvailable.get(i).getChips().get(i).getLength() > longestChip) {
+					// if true the make the longest chip equal to that new longest chip
+					longestChip = theBeatlesAvailable.get(i).getChips().get(i).getLength();
+					temp = theBeatlesAvailable.get(i);
+				}
+				// else nothing
+			}
+			// once you found the longest chip then check to see whose chip it is and say
+			// thats who has the
+			// longest chip
+		}
+
+		for (int i = 0; i < theBeatlesAvailable.size(); i++) {
+			if (temp == theBeatlesAvailable.get(i)) {
+				System.out.println(theBeatlesAvailable.get(i).getName());
+			}
+		}
+
 	}
 
 	private void initializeBeatles() {
