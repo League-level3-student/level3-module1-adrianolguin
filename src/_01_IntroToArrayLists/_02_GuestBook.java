@@ -50,10 +50,10 @@ public class _02_GuestBook implements ActionListener {
 		if (e.getSource() == button1) {
 			String nameInput = JOptionPane.showInputDialog("Enter a name.");
 			names.add(nameInput);
-		} else if(e.getSource() == button2) {
+		} else if (e.getSource() == button2) {
 			String list = "";
 			for (int i = 0; i < names.size(); i++) {
-				list = list + "Guest #1: " + names.get(i) + "\n";
+				list = list + "Guest #" + (i + 1) + ": " + names.get(i) + "\n";
 			}
 			JOptionPane.showMessageDialog(null, list);
 		}
