@@ -21,19 +21,22 @@ public class _03_TestMatchingBrackets {
 	// USE A STACK TO COMPLETE THE METHOD FOR CHECKING IF EVERY OPENING BRACKET HAS
 	// A MATCHING CLOSING BRACKET
 	private boolean doBracketsMatch(String b) {
-		Stack<Character> stack = new Stack<Character>();
+		Stack<Character> chars = new Stack<Character>();
 		for (int i = 0; i < b.length(); i++) {
 			if (b.charAt(i) == '{') {
-				stack.push(b.charAt(i));
+				chars.push('{');
 			} else if (b.charAt(i) == '}') {
-				stack.pop();
+				if (chars.size() > 0) {
+					chars.pop();
+				}
 			}
 		}
-		if (stack.size() == 0) {
+		if (chars.size() == 0) {
 			return true;
 		} else {
 			return false;
 		}
+
 	}
 
 }
