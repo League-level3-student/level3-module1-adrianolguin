@@ -18,18 +18,22 @@ public class HangMan implements KeyListener {
 	int maxWords = 0;
 	int lives = 6;
 	String currentWord = null;
+	boolean[] visibleLetters;
 
 	public static void main(String[] args) {
 		HangMan main = new HangMan();
 		main.initializeWordStack();
 		main.createGUI();
 		main.selectNewWord();
-		main.lifeMonitor();
+	}
 
+	void startGame() {
+		initializeWordStack();
+		selectNewWord();
 	}
 
 	void initializeWordStack() {
-		String wordAmount = JOptionPane.showInputDialog("what is a number");
+		String wordAmount = JOptionPane.showInputDialog("How many words would you like to guess?");
 		maxWords = Integer.parseInt(wordAmount);
 		for (int i = 0; i < maxWords; i++) {
 			words.push(utilityAccess.readRandomLineFromFile("dictionary.txt"));
@@ -44,34 +48,77 @@ public class HangMan implements KeyListener {
 	}
 
 	void selectNewWord() {
+		lives = 6;
 		currentWord = words.pop();
-		System.out.println(currentWord);
-		while (label.getText().length() != currentWord.length()) {
-			label.setText(label.getText() + "-");
+		visibleLetters = new boolean[currentWord.length()];
+		for (int i = 0; i < visibleLetters.length; i++) {
+			visibleLetters[i] = false;
 		}
+		initializePanelText();
 		frame.pack();
 
 	}
-	
-	void lifeMonitor() {
-		if(lives == 0) {
-			JOptionPane.showMessageDialog(null, "Game Over \n You have lost");
+
+	void initializePanelText() {
+		label.setText("");
+		for (int i = 0; i < currentWord.length(); i++) {
+			if (visibleLetters[i] == false) {
+				label.setText(label.getText() + "-");
+			} else {
+				label.setText(label.getText() + currentWord.charAt(i));
+			}
 		}
+	}
+
+	void lifeMonitor() {
+		if (lives < 1) {
+			JOptionPane.showMessageDialog(null, "Game Over \n You have lost");
+			if (JOptionPane.showConfirmDialog(null, "would you like to play again?") == 0) {
+				startGame();
+			}
+		}
+	}
+
+	boolean arrayEquals() {
+		boolean condition = true;
+		for (int i = 0; i < visibleLetters.length; i++) {
+			if (visibleLetters[i] != true) {
+				condition = false;
+			}
+		}
+		return condition;
+
 	}
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		char keyPressed = arg0.getKeyChar();
-		for (int i = 0; i < currentWord.length(); i++) {
-			if (keyPressed == currentWord.charAt(i)) {
-				String temp = label.getText();
-				temp = temp.substring(0, i) + keyPressed + temp.substring(i + 1);
-				label.setText(temp);
+
+		if (currentWord.contains("" + keyPressed)) {
+			for (int i = 0; i < currentWord.length(); i++) {
+				if (currentWord.charAt(i) == keyPressed) {
+					visibleLetters[i] = true;
+				}
+			}
+			initializePanelText();
+		} else {
+			lives--;
+			System.out.println("lives: " + lives);
+		}
+		lifeMonitor();
+		if (arrayEquals()) {
+			if (words.size() == 0) {
+
+				if (JOptionPane.showConfirmDialog(null,
+						"Wow! You guessed all the words correctly\nWould you like to play again?") == 0) {
+					startGame();
+				}
 			} else {
-				lives--;
+				selectNewWord();
 			}
 		}
+
 	}
 
 	@Override
